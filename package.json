@@ -9,9 +9,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "pretest": "npm run build",
-    "test": "jest",
-    "prepublish": "npm test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
