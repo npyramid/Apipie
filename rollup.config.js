@@ -1,41 +1,35 @@
-const buble = require('rollup-plugin-buble');
-const cjs = require('rollup-plugin-commonjs');
-import resolve from 'rollup-plugin-node-resolve';
-import uglify from 'rollup-plugin-uglify';
-
-let pkg = require('./package.json');
-let external = Object.keys(pkg.dependencies);
+const babel = require('rollup-plugin-babel');
+const cjs = require('@rollup/plugin-commonjs');
+const resolve = require('@rollup/plugin-node-resolve');
+const { terser } = require('rollup-plugin-terser');
+const pkg = require('./package.json');
 
 export default {
-  entry: 'lib/index.js',
+  input: 'lib/index.js',
   plugins: [
-    buble(),
+    resolve({ browser: true }),
     cjs(),
-    resolve(),
-    uglify(),
+    babel({
+      exclude: 'node_modules/**',
+    }),
+    terser({
+      sourcemap: false,
+    }),
   ],
-  //external: external,
-  // globals: {
-  //   'path-to-regexp': 'pathToRegexp',
-  //   deepmerge: 'merge'
-  // },
-  targets: [
+  output: [
     {
-      dest: pkg.main,
+      file: pkg.main,
       format: 'iife',
-      moduleName: 'apipie',
-      sourceMap: false,
+      name: 'apipie',
     },
     {
-      dest: pkg.cjs,
+      file: pkg.cjs,
       format: 'cjs',
-      moduleName: 'apipie',
-      sourceMap: false,
+      name: 'apipie',
     },
     {
-      dest: pkg.module,
+      file: pkg.module,
       format: 'es',
-      sourceMap: false,
-    }
-  ]
+    },
+  ],
 };
